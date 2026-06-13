@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import QueryProviders from "@/providers/QueryProvider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+// @ts-ignore: side-effect CSS import
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
@@ -17,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Acadex",
-  description: "Acadex is a classroom-based note-sharing platform where users can upload, organize, and access study materials with approval, favorites, and comments.",
+  title: "Injentro",
+  description: "project starter for hackathons",
 };
 
 export default function RootLayout({

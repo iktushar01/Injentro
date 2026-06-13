@@ -42,7 +42,7 @@ npm install
 
 ### 2. Create your environment file
 
-Create `Acadex-client/.env.local` with values similar to:
+Create `-client/.env.local` with values similar to:
 
 ```env
 NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api/v1

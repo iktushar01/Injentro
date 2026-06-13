@@ -3,8 +3,8 @@ import { SidebarData } from "@/types/sidebar";
 export const adminSidebar: SidebarData = {
   logo: {
     src: "/logo.png",
-    alt: "Acadex logo",
-    title: "Acadex",
+    alt: "Injentro logo",
+    title: "Injentro",
     description: "Admin Panel",
   },
   navGroups: [
@@ -12,8 +12,6 @@ export const adminSidebar: SidebarData = {
       title: "Overview",
       items: [
         { label: "Dashboard",      icon: "LayoutDashboard", href: "/admin/dashboard" },
-        { label: "Classrooms Management",      icon: "BarChart3",       href: "/admin/classrooms-management" },
-        { label: "Admin Management",  icon: "Bell",            href: "/admin/admin-management"},
       ],
     },
     // {

@@ -4,8 +4,8 @@ export const getClientSidebarData = async (): Promise<SidebarData> => {
   return {
     logo: {
       src: "/logo.png",
-      alt: "Acadex logo",
-      title: "Acadex",
+      alt: "Injentro logo",
+      title: "Injentro",
       description: "Student Panel",
     },
     navGroups: [
