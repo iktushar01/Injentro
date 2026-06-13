@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { useMutation } from "@tanstack/react-query";
-import { ChevronLeft, Mail, RefreshCw, ShieldCheck, Timer } from "lucide-react";
+import { ChevronLeft, RefreshCw, Timer } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -90,105 +90,89 @@ const VerifyEmailForm = () => {
   };
 
   return (
-    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-background">
-      {/* NOTEPAD BACKGROUND EFFECT */}
-      <div
-        className="absolute inset-0 z-0 opacity-30 dark:opacity-10 pointer-events-none"
-        style={{
-          backgroundImage: `linear-gradient(var(--muted) 1px, transparent 1px)`,
-          backgroundSize: "100% 2.5rem",
-        }}
-      />
-      <div className="absolute top-0 left-[10%] h-full w-[2px] bg-destructive/10 z-0 md:left-[15%] lg:left-[20%]" />
-
-      <nav className="absolute top-6 left-6 z-20">
+    <main className="relative flex min-h-screen w-full items-center justify-center bg-background p-4 sm:p-6 lg:p-8">
+      {/* Absolute Back Route Navigation */}
+      <nav className="absolute top-4 left-4 z-20">
         <Link href="/register">
-          <Button variant="ghost" className="group gap-2 rounded-full hover:bg-primary/10 hover:text-primary">
-            <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+          <Button variant="ghost" size="sm" className="group gap-1 text-muted-foreground hover:text-foreground">
+            <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
             Back
           </Button>
         </Link>
       </nav>
 
-      <div className="relative w-full max-w-[500px] px-6 z-10">
-        <div className="w-full rounded-[2.5rem] border border-border bg-card/80 p-8 md:p-12 shadow-2xl backdrop-blur-xl text-center">
-          
-          <div className="flex flex-col items-center mb-8">
-            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary shadow-lg shadow-primary/20">
-              <ShieldCheck className="h-8 w-8 text-primary-foreground" />
-            </div>
-            <h2 className="text-3xl font-black tracking-tight text-foreground">Verify Your Identity</h2>
+      {/* Strictly Clean & Centered Container */}
+      <div className="w-full max-w-[360px] space-y-6">
+        <div className="space-y-1.5 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">Verify Identity</h1>
+          <p className="text-sm text-muted-foreground break-all">
+            We sent a verification token to <span className="font-medium text-foreground">{email}</span>
+          </p>
+        </div>
+
+        <form onSubmit={handleVerify} className="space-y-5">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <Label className="text-xs text-muted-foreground">
+              6-Digit Security Code
+            </Label>
             
-            <div className="mt-4 flex flex-col items-center gap-2">
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/50 border border-border">
-                <Mail className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="text-xs font-medium text-muted-foreground truncate max-w-[200px]">
-                  {email}
-                </span>
-              </div>
-              
-              {/* TIMER DISPLAY */}
-              <div className={`flex items-center gap-1.5 text-sm font-bold ${timeLeft < 60 ? "text-destructive animate-pulse" : "text-primary"}`}>
-                <Timer className="h-4 w-4" />
-                <span>Code expires in: {formatTime(timeLeft)}</span>
-              </div>
+            <InputOTP
+              maxLength={6}
+              value={otp}
+              onChange={(value) => setOtp(value)}
+              disabled={timeLeft <= 0}
+            >
+              <InputOTPGroup>
+                {[...Array(6)].map((_, i) => (
+                  <InputOTPSlot
+                    key={i}
+                    index={i}
+                    // Standard raw shadcn sizing specs
+                    className="h-10 w-10 text-base"
+                  />
+                ))}
+              </InputOTPGroup>
+            </InputOTP>
+
+            {/* Countdown State Wrapper */}
+            <div className={`flex items-center gap-1.5 text-xs ${timeLeft < 60 ? "text-destructive animate-pulse font-medium" : "text-muted-foreground"}`}>
+              <Timer className="h-3.5 w-3.5" />
+              <span>Code expires in: {formatTime(timeLeft)}</span>
             </div>
           </div>
 
-          <form onSubmit={handleVerify} className="space-y-10">
-            <div className="flex flex-col items-center gap-4">
-              <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                Enter 6-Digit Code
-              </Label>
-              <InputOTP
-                maxLength={6}
-                value={otp}
-                onChange={(value) => setOtp(value)}
-                disabled={timeLeft <= 0}
-              >
-                <InputOTPGroup className="gap-2 md:gap-3">
-                  {[...Array(6)].map((_, i) => (
-                    <InputOTPSlot
-                      key={i}
-                      index={i}
-                      className="h-12 w-10 md:h-14 md:w-12 rounded-xl border-2 border-muted-foreground/20 text-lg font-bold transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
-                    />
-                  ))}
-                </InputOTPGroup>
-              </InputOTP>
-            </div>
+          {serverError && (
+            <Alert variant="destructive" className="rounded-md py-2.5">
+              <AlertDescription className="text-xs">{serverError}</AlertDescription>
+            </Alert>
+          )}
 
-            {serverError && (
-              <Alert variant="destructive" className="rounded-2xl border-destructive/20 bg-destructive/5 text-left animate-in fade-in zoom-in-95">
-                <AlertDescription className="text-xs font-medium">{serverError}</AlertDescription>
-              </Alert>
-            )}
+          <AppSubmitButton
+            isPending={isPending}
+            pendingLabel="Verifying..."
+            disabled={otp.length !== 6 || isPending || timeLeft <= 0}
+            className="w-full rounded-md"
+          >
+            Verify Account
+          </AppSubmitButton>
+        </form>
 
-            <AppSubmitButton
-              isPending={isPending}
-              pendingLabel="Verifying..."
-              disabled={otp.length !== 6 || isPending || timeLeft <= 0}
-            >
-              Verify Account
-            </AppSubmitButton>
-          </form>
-
-          <div className="mt-10 pt-6 border-t border-border/50">
-            <p className="text-xs text-muted-foreground mb-4">
-              Didn't receive the code or is it expired?
-            </p>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="h-10 rounded-xl gap-2 font-bold px-6 hover:bg-secondary border-dashed"
-              onClick={handleResendOtp}
-              disabled={isResending || isPending || (timeLeft > 840)} // Disable for first 1 min after resend
-            >
-              <RefreshCw className={`h-3.5 w-3.5 ${isResending ? "animate-spin" : ""}`} />
-              {isResending ? "Resending..." : "Resend New Code"}
-            </Button>
-          </div>
+        {/* Minimal Bottom Action Split */}
+        <div className="space-y-3 text-center pt-2 border-t border-border">
+          <p className="text-xs text-muted-foreground">
+            Didn't receive the link or token expired?
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="w-full gap-2 text-xs h-9"
+            onClick={handleResendOtp}
+            disabled={isResending || isPending || (timeLeft > 840)}
+          >
+            <RefreshCw className={`h-3 w-3 ${isResending ? "animate-spin" : ""}`} />
+            {isResending ? "Requesting..." : "Resend code"}
+          </Button>
         </div>
       </div>
     </main>

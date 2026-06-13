@@ -10,7 +10,7 @@ const SidebarLogo = () => {
       <div className="relative overflow-hidden rounded-lg transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
         <Image
           src="/logo.png"
-          alt="Acadex Logo"
+          alt="In Logo"
           width={36}
           height={36}
           className="rounded-lg"
