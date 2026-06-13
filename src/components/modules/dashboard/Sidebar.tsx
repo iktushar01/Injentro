@@ -12,7 +12,6 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogMedia,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
@@ -119,7 +118,6 @@ export const AppSidebar = ({ data, user }: AppSidebarProps) => {
               <SidebarMenu>
                 {group.items.map((item) => {
                   const isActive = pathname === item.href;
-                  // ✅ Resolve icon component here, inside the Client Component
                   const Icon = iconRegistry[item.icon];
 
                   return (
@@ -161,9 +159,9 @@ export const AppSidebar = ({ data, user }: AppSidebarProps) => {
                 size="lg"
                 className="w-full data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
-                <Avatar className="h-8 w-8 rounded-lg">
+                <Avatar className="h-8 w-8 rounded-md">
                   <AvatarImage src={user.avatar ?? undefined} alt={user.name} />
-                  <AvatarFallback className="rounded-lg text-xs">
+                  <AvatarFallback className="rounded-md text-xs">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
@@ -188,7 +186,7 @@ export const AppSidebar = ({ data, user }: AppSidebarProps) => {
               <div className="px-2 py-1.5">
                 <p className="text-xs text-muted-foreground">Signed in as</p>
                 <p className="truncate text-sm font-medium">{user.email}</p>
-                <span className="mt-1 inline-block rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
+                <span className="mt-1 inline-block rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                   {user.role}
                 </span>
               </div>
@@ -222,58 +220,43 @@ export const AppSidebar = ({ data, user }: AppSidebarProps) => {
         )}
       </SidebarFooter>
 
+      {/* Clean & Centered Confirmation Dialog */}
       <AlertDialog open={isLogoutDialogOpen} onOpenChange={setIsLogoutDialogOpen}>
-        <AlertDialogContent className="overflow-hidden rounded-[2rem] border border-border/60 bg-background/95 p-0 shadow-2xl backdrop-blur-2xl">
-          <div className="relative">
-            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-destructive/10 via-orange-500/5 to-transparent" />
-            <AlertDialogHeader className="relative px-6 pt-7 pb-4">
-              <AlertDialogMedia className="mb-3 size-14 rounded-3xl border border-destructive/20 bg-destructive/10 text-destructive shadow-sm">
-                <LogOut className="h-6 w-6" />
-              </AlertDialogMedia>
-              <div className="mb-3 inline-flex items-center rounded-full border border-destructive/15 bg-destructive/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-destructive/80">
-                Confirm Exit
-              </div>
-              <AlertDialogTitle className="text-2xl font-black tracking-tight">
-                Sign out now?
-              </AlertDialogTitle>
-              <AlertDialogDescription className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
-                This will end your current session and reload the app so the
-                sidebar and protected views return to a signed-out state.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
+        <AlertDialogContent className="max-w-[400px] rounded-lg border border-border bg-background p-6 shadow-lg">
+          <AlertDialogHeader className="text-center sm:text-left space-y-1.5">
+            <AlertDialogTitle className="text-xl font-semibold tracking-tight">
+              Sign out now?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-muted-foreground leading-normal">
+              This will end your current session. Make sure you&apos;ve saved any in-progress work before continuing.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
 
-            <div className="mx-6 mb-6 rounded-[1.5rem] border border-border/50 bg-muted/30 px-4 py-3">
-              <p className="text-xs font-semibold text-foreground/80">
-                Make sure you&apos;ve saved any in-progress work before continuing.
-              </p>
-            </div>
-
-            <AlertDialogFooter className="border-t border-border/50 bg-background/80 px-6 py-5 sm:grid sm:grid-cols-2 sm:gap-3">
-              <AlertDialogCancel
-                disabled={isLoggingOut}
-                className="h-11 rounded-2xl border-border/70 font-semibold"
-              >
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction
-                onClick={(event) => {
-                  event.preventDefault();
-                  void handleLogout();
-                }}
-                disabled={isLoggingOut}
-                className="h-11 rounded-2xl bg-destructive font-bold text-white shadow-lg shadow-destructive/20 hover:bg-destructive/90"
-              >
-                {isLoggingOut ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Logging out...
-                  </>
-                ) : (
-                  "Yes, sign out"
-                )}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </div>
+          <AlertDialogFooter className="pt-2 sm:space-x-2">
+            <AlertDialogCancel
+              disabled={isLoggingOut}
+              className="rounded-md text-xs h-9"
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(event) => {
+                event.preventDefault();
+                void handleLogout();
+              }}
+              disabled={isLoggingOut}
+              className="rounded-md bg-destructive text-xs h-9 text-destructive-foreground hover:bg-destructive/95 shadow-sm"
+            >
+              {isLoggingOut ? (
+                <div className="flex items-center gap-1.5">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <span>Signing out...</span>
+                </div>
+              ) : (
+                "Sign out"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </Sidebar>

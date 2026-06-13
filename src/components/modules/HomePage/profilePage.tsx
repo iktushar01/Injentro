@@ -8,7 +8,6 @@ import {
   BadgeCheck,
   Globe,
   Loader2,
-  MailCheck,
   Pencil,
   Phone,
   MapPin,
@@ -89,19 +88,19 @@ const ProfilePage = () => {
 
   if (isError || !user) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center px-4">
-        <div className="max-w-md w-full text-center space-y-4 p-12 rounded-[2.5rem] border border-destructive/20 bg-destructive/5 backdrop-blur-md">
-          <ShieldCheck className="h-12 w-12 text-destructive mx-auto opacity-50" />
-          <h2 className="text-2xl font-black italic tracking-tighter">Access Denied</h2>
-          <p className="text-sm text-muted-foreground font-medium">
-            {error?.message || "Internal system sync failure."}
+      <div className="flex min-h-[50vh] items-center justify-center p-4">
+        <div className="max-w-md w-full text-center space-y-4 p-8 rounded-xl border border-destructive/20 bg-destructive/5">
+          <ShieldCheck className="h-10 w-10 text-destructive mx-auto opacity-70" />
+          <h2 className="text-xl font-semibold tracking-tight">Access failure</h2>
+          <p className="text-sm text-muted-foreground">
+            {error?.message || "Internal environment session sync failure."}
           </p>
           <Button
             variant="outline"
             onClick={() => window.location.reload()}
-            className="rounded-2xl border-destructive/20 hover:bg-destructive/10 font-bold"
+            className="rounded-lg border-destructive/20 text-xs font-medium"
           >
-            Re-authenticate
+            Re-authenticate session
           </Button>
         </div>
       </div>
@@ -162,153 +161,142 @@ const ProfilePage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8 lg:p-12 animate-in fade-in duration-500">
-      <div className="mx-auto max-w-6xl space-y-8">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2 rounded-[3rem] border border-border bg-card p-8 shadow-premium">
-            <div className="flex flex-col gap-8 md:flex-row md:items-center">
-              <div className="relative">
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="relative h-40 w-40 cursor-pointer overflow-hidden rounded-full border-[8px] border-background shadow-2xl group"
-                >
-                  {previewImage ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={previewImage} alt={user.name} className="h-full w-full object-cover" />
-                  ) : (
-                    <Avatar className="h-full w-full">
-                      <AvatarFallback className="bg-primary text-primary-foreground text-5xl font-black">
-                        {user.name?.[0]?.toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                  )}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                    <Camera className="size-8 text-white" />
-                  </div>
+    <div className="min-h-screen bg-background p-4 md:p-8 lg:p-16 antialiased">
+      <div className="mx-auto max-w-5xl space-y-12">
+        
+        {/* Profile Card Header Component */}
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between border border-border bg-card p-6 rounded-xl">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center">
+            <div className="relative group mx-auto md:mx-0">
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="relative h-24 w-24 cursor-pointer overflow-hidden rounded-lg border border-border bg-muted"
+              >
+                {previewImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={previewImage} alt={user.name} className="h-full w-full object-cover" />
+                ) : (
+                  <Avatar className="h-full w-full rounded-none">
+                    <AvatarFallback className="bg-muted text-foreground text-2xl font-semibold rounded-none">
+                      {user.name?.[0]?.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                  <Camera className="size-5 text-white" />
                 </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute -bottom-1 -right-1 rounded-md border border-border bg-background p-1.5 shadow-sm text-muted-foreground hover:text-foreground"
+              >
+                <Pencil className="size-3.5" />
+              </button>
+              {selectedImage && (
                 <button
                   type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="absolute bottom-2 right-2 rounded-2xl border-4 border-background bg-primary p-3 text-primary-foreground shadow-xl"
+                  onClick={() => handleImageChange(null)}
+                  className="absolute -top-1 -left-1 flex h-5 w-5 items-center justify-center rounded-md bg-destructive text-white shadow-sm"
                 >
-                  <Pencil className="size-5" />
+                  <X className="size-3" />
                 </button>
-                {selectedImage && (
-                  <button
-                    type="button"
-                    onClick={() => handleImageChange(null)}
-                    className="absolute -right-1 top-1 flex h-8 w-8 items-center justify-center rounded-full bg-destructive text-white shadow-lg"
-                  >
-                    <X className="size-4" />
-                  </button>
-                )}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => handleImageChange(e.target.files?.[0] ?? null)}
-                />
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => handleImageChange(e.target.files?.[0] ?? null)}
+              />
+            </div>
+
+            <div className="space-y-2 text-center md:text-left">
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                <h1 className="text-2xl font-semibold tracking-tight">{user.name}</h1>
+                {user.emailVerified && <BadgeCheck className="size-5 text-muted-foreground" />}
               </div>
-
-              <div className="flex-1 space-y-4">
-                <div className="space-y-2">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <h1 className="text-4xl font-black tracking-tighter md:text-5xl">{user.name}</h1>
-                    {user.emailVerified && <BadgeCheck className="size-8 text-primary fill-primary/10" />}
-                  </div>
-                  <p className="flex items-center gap-2 font-bold text-muted-foreground">
-                    <Mail className="size-4" />
-                    {user.email}
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-3">
-                  <Badge className="rounded-xl bg-primary px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-primary-foreground">
-                    {user.role}
-                  </Badge>
-                  <Badge variant="outline" className="rounded-xl border-primary/20 bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-primary">
-                    {user.status}
-                  </Badge>
-                </div>
+              <p className="flex items-center justify-center md:justify-start gap-1.5 text-sm text-muted-foreground">
+                <Mail className="size-3.5" />
+                {user.email}
+              </p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5">
+                <Badge variant="secondary" className="rounded-md font-medium text-xs px-2 py-0.5">
+                  {user.role}
+                </Badge>
+                <Badge variant="outline" className="rounded-md font-medium text-xs px-2 py-0.5 text-muted-foreground border-border">
+                  {user.status}
+                </Badge>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col justify-between rounded-[3rem] bg-primary p-8 text-primary-foreground shadow-glow">
-            <div className="flex items-start justify-between">
-              <div className="rounded-2xl bg-white/20 p-3 backdrop-blur-md">
-                <ShieldCheck className="size-6" />
-              </div>
-              <Button
-                onClick={handleSave}
-                disabled={isSaving}
-                variant="ghost"
-                className="rounded-2xl bg-white/10 text-white hover:bg-white/20"
-              >
-                {isSaving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
-                Save
-              </Button>
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70">Profile Control</p>
-              <h3 className="text-3xl font-black tracking-tighter">Keep Your Details Fresh</h3>
-              <p className="text-sm font-medium leading-tight opacity-80">
-                Update the fields below and save to sync your profile across Acadex.
-              </p>
-            </div>
+          <div className="flex justify-center md:justify-end">
+            <Button
+              onClick={handleSave}
+              disabled={isSaving}
+              size="sm"
+              className="rounded-lg h-9 font-medium text-xs"
+            >
+              {isSaving ? <Loader2 className="size-3.5 animate-spin mr-1.5" /> : <Save className="size-3.5 mr-1.5" />}
+              Save changes
+            </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* Form Workspaces Configuration Layout Grid */}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
           <section className="space-y-6 lg:col-span-2">
-            <h3 className="px-4 text-[10px] font-black uppercase tracking-[0.3em] text-primary">Editable Profile</h3>
-            <div className="grid grid-cols-1 gap-4 rounded-[2.5rem] border border-border bg-card p-6 shadow-sm md:grid-cols-2">
-              <ProfileField label="Full Name" icon={<User className="size-4" />}>
+            <div>
+              <h3 className="text-sm font-medium tracking-tight">Account settings</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">Maintain up to date environment profiles.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-4 border border-border rounded-xl p-5 bg-card md:grid-cols-2">
+              <ProfileField label="Full Name">
                 <Input
                   value={form.name}
                   onChange={(e) => handleFieldChange("name", e.target.value)}
-                  className="h-11 rounded-2xl"
-                  placeholder="Your full name"
+                  className="h-9 rounded-lg text-sm"
+                  placeholder="Profile workspace name"
                 />
               </ProfileField>
 
-              <ProfileField label="Contact Number" icon={<Phone className="size-4" />}>
+              <ProfileField label="Contact Number">
                 <Input
                   value={form.contactNumber}
                   onChange={(e) => handleFieldChange("contactNumber", e.target.value)}
-                  className="h-11 rounded-2xl"
-                  placeholder="+8801..."
+                  className="h-9 rounded-lg text-sm"
+                  placeholder="System endpoint number"
                 />
               </ProfileField>
 
-              <ProfileField label="Profile Photo" icon={<Camera className="size-4" />}>
+              <ProfileField label="Profile Image Link Override">
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex h-11 w-full items-center justify-between rounded-2xl border border-input bg-transparent px-4 text-sm transition-colors hover:border-primary/50 hover:bg-muted/40"
+                  className="flex h-9 w-full items-center justify-between rounded-lg border border-input bg-transparent px-3 text-xs text-muted-foreground transition-colors hover:bg-muted/50"
                 >
-                  <span className="truncate text-left">
-                    {selectedImage ? selectedImage.name : "Choose a new profile image"}
+                  <span className="truncate max-w-[180px]">
+                    {selectedImage ? selectedImage.name : "Select raw asset replacement"}
                   </span>
-                  <span className="font-bold text-primary">Browse</span>
+                  <span className="font-medium text-foreground">Browse</span>
                 </button>
               </ProfileField>
 
               {isClient && (
-                <ProfileField label="Gender" icon={<User className="size-4" />}>
+                <ProfileField label="Gender Identity">
                   <Select
                     value={form.gender || "__empty__"}
                     onValueChange={(value) =>
                       handleFieldChange("gender", value === "__empty__" ? "" : (value as ProfileFormState["gender"]))
                     }
                   >
-                    <SelectTrigger className="h-11 w-full rounded-2xl">
-                      <SelectValue placeholder="Select gender" />
+                    <SelectTrigger className="h-9 w-full rounded-lg text-xs">
+                      <SelectValue placeholder="Specify mapping identifier" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="__empty__">Not set</SelectItem>
+                      <SelectItem value="__empty__">Not explicitly mapped</SelectItem>
                       <SelectItem value="MALE">Male</SelectItem>
                       <SelectItem value="FEMALE">Female</SelectItem>
                       <SelectItem value="OTHER">Other</SelectItem>
@@ -319,65 +307,55 @@ const ProfilePage = () => {
 
               {isClient && (
                 <div className="md:col-span-2">
-                  <ProfileField label="Address" icon={<MapPin className="size-4" />}>
+                  <ProfileField label="Physical Address Location">
                     <Textarea
                       value={form.address}
                       onChange={(e) => handleFieldChange("address", e.target.value)}
-                      className="min-h-28 rounded-[1.5rem] px-4 py-3"
-                      placeholder="Add your address"
+                      className="min-h-24 rounded-lg px-3 py-2 text-sm"
+                      placeholder="Specify account structural destination mapping configuration details"
                     />
                   </ProfileField>
                 </div>
               )}
-
-              <div className="md:col-span-2 flex justify-end">
-                <Button
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className="h-12 rounded-2xl bg-orange-500 px-6 font-black text-white hover:bg-orange-600"
-                >
-                  {isSaving ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Save className="mr-2 size-4" />}
-                  Save Changes
-                </Button>
-              </div>
             </div>
           </section>
 
+          {/* Infrastructure Integration Metadata Column */}
           <section className="space-y-6">
-            <h3 className="px-4 text-[10px] font-black uppercase tracking-[0.3em] text-primary">System Integration</h3>
+            <div>
+              <h3 className="text-sm font-medium tracking-tight">Identity integration</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">Immutable global environment metadata states.</p>
+            </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <StatusCard
-                icon={<MailCheck className="size-6" />}
-                title="Email Status"
-                value={user.emailVerified ? "Primary Verified" : "Verification Pending"}
-                tone="success"
+                title="Authentication status"
+                value={user.emailVerified ? "Identity verified" : "Awaiting verification handshake"}
               />
 
               <StatusCard
-                icon={<Globe className="size-6" />}
-                title="Joined"
-                value={joinedDate}
-                tone="default"
+                title="Creation handoff"
+                value={`Synchronized ${joinedDate}`}
               />
 
-              <div className="rounded-[2.5rem] border border-border bg-muted/20 p-6">
-                <div className="flex items-start gap-4">
-                  <div className="rounded-2xl bg-card p-3 shadow-sm">
-                    <Calendar className="size-6 text-primary" />
-                  </div>
-                  <div className="space-y-2">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Account Email</p>
-                    <p className="font-bold">{user.email}</p>
-                    <p className="text-sm font-medium text-muted-foreground">
-                      Email editing is intentionally locked because it is tied to your authentication identity.
-                    </p>
-                  </div>
+              <div className="rounded-xl border border-border bg-muted/20 p-5 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Calendar className="size-4 text-muted-foreground" />
+                  <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Identity scope lock</span>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-mono bg-muted/60 px-2 py-1 border border-border rounded text-foreground break-all inline-block w-full">
+                    {user.email}
+                  </p>
+                  <p className="text-[11px] leading-normal text-muted-foreground">
+                    System identifier scopes cannot be changed arbitrarily because configuration state relies on initial authentication parameters.
+                  </p>
                 </div>
               </div>
             </div>
           </section>
         </div>
+
       </div>
     </div>
   );
@@ -385,105 +363,64 @@ const ProfilePage = () => {
 
 const ProfileField = ({
   label,
-  icon,
   children,
 }: {
   label: string;
-  icon: React.ReactNode;
   children: React.ReactNode;
 }) => (
-  <div className="space-y-2">
-    <div className="flex items-center gap-2 px-1">
-      <span className="rounded-xl bg-primary/10 p-2 text-primary">{icon}</span>
-      <span className="text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground">{label}</span>
-    </div>
+  <div className="space-y-1.5">
+    <label className="text-[11px] font-medium tracking-wide text-muted-foreground block px-0.5">
+      {label}
+    </label>
     {children}
   </div>
 );
 
 const StatusCard = ({
-  icon,
   title,
   value,
-  tone,
 }: {
-  icon: React.ReactNode;
   title: string;
   value: string;
-  tone: "success" | "default";
 }) => (
-  <div className="rounded-[2.5rem] border border-border bg-card/50 p-6 backdrop-blur-sm">
-    <div className="flex items-center gap-4">
-      <div
-        className={
-          tone === "success"
-            ? "rounded-2xl bg-green-500/10 p-3 text-green-600"
-            : "rounded-2xl bg-primary/10 p-3 text-primary"
-        }
-      >
-        {icon}
-      </div>
-      <div>
-        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{title}</p>
-        <p className="font-bold">{value}</p>
-      </div>
-    </div>
+  <div className="rounded-xl border border-border bg-card p-4">
+    <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{title}</p>
+    <p className="text-sm font-semibold mt-0.5 text-foreground">{value}</p>
   </div>
 );
 
 const ProfilePageSkeleton = () => (
-  <div className="min-h-screen bg-background p-4 md:p-8 lg:p-12 animate-pulse">
-    <div className="mx-auto max-w-6xl space-y-8">
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 rounded-[3rem] border border-border bg-card p-8 shadow-premium">
-          <div className="flex flex-col gap-8 md:flex-row md:items-center">
-            <div className="h-40 w-40 rounded-full bg-muted" />
-            <div className="flex-1 space-y-4">
-              <div className="h-12 w-64 rounded-2xl bg-muted" />
-              <div className="h-5 w-72 rounded-xl bg-muted" />
-              <div className="flex gap-3">
-                <div className="h-8 w-24 rounded-xl bg-muted" />
-                <div className="h-8 w-24 rounded-xl bg-muted" />
-              </div>
-            </div>
+  <div className="min-h-screen bg-background p-4 md:p-8 lg:p-16 animate-pulse">
+    <div className="mx-auto max-w-5xl space-y-12">
+      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between border border-border bg-card p-6 rounded-xl">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center">
+          <div className="h-24 w-24 rounded-lg bg-muted" />
+          <div className="space-y-2">
+            <div className="h-6 w-48 rounded bg-muted" />
+            <div className="h-4 w-36 rounded bg-muted" />
+            <div className="h-4 w-20 rounded bg-muted" />
           </div>
         </div>
-        <div className="rounded-[3rem] bg-card p-8 shadow-premium">
-          <div className="flex items-start justify-between">
-            <div className="h-12 w-12 rounded-2xl bg-muted" />
-            <div className="h-10 w-24 rounded-2xl bg-muted" />
-          </div>
-          <div className="mt-20 space-y-3">
-            <div className="h-3 w-24 rounded bg-muted" />
-            <div className="h-10 w-56 rounded-2xl bg-muted" />
-            <div className="h-5 w-full rounded-xl bg-muted" />
-          </div>
-        </div>
+        <div className="h-9 w-28 rounded-lg bg-muted" />
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-2">
-          <div className="h-3 w-32 rounded bg-muted" />
-          <div className="grid grid-cols-1 gap-4 rounded-[2.5rem] border border-border bg-card p-6 shadow-sm md:grid-cols-2">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <div key={index} className={index === 4 ? "md:col-span-2 space-y-2" : "space-y-2"}>
-                <div className="h-3 w-24 rounded bg-muted" />
-                <div className="h-11 w-full rounded-2xl bg-muted" />
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
+        <div className="lg:col-span-2 space-y-6">
+          <div className="h-4 w-32 rounded bg-muted" />
+          <div className="grid grid-cols-1 gap-4 border border-border rounded-xl p-5 bg-card md:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="space-y-2">
+                <div className="h-3 w-20 rounded bg-muted" />
+                <div className="h-9 w-full rounded-lg bg-muted" />
               </div>
             ))}
-            <div className="md:col-span-2 flex justify-end">
-              <div className="h-12 w-40 rounded-2xl bg-muted" />
-            </div>
           </div>
         </div>
-
-        <div className="space-y-6">
-          <div className="h-3 w-36 rounded bg-muted" />
-          <div className="space-y-4">
-            <div className="h-28 rounded-[2.5rem] bg-card" />
-            <div className="h-28 rounded-[2.5rem] bg-card" />
-            <div className="h-40 rounded-[2.5rem] bg-card" />
-          </div>
+        <div className="space-y-4">
+          <div className="h-4 w-32 rounded bg-muted" />
+          <div className="h-16 rounded-xl bg-muted" />
+          <div className="h-16 rounded-xl bg-muted" />
+          <div className="h-28 rounded-xl bg-muted" />
         </div>
       </div>
     </div>

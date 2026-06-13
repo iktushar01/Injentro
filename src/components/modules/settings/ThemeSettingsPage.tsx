@@ -13,25 +13,25 @@ const THEME_OPTIONS: Array<{
   value: ThemeMode;
   label: string;
   description: string;
-  icon: React.ReactNode;
+  icon: React.ComponentType<{ className?: string }>;
 }> = [
   {
     value: "light",
     label: "Light",
-    description: "Keep the interface bright and clean.",
-    icon: <Sun className="size-5" />,
+    description: "Bright and clean workspace view.",
+    icon: Sun,
   },
   {
     value: "dark",
     label: "Dark",
-    description: "Use the darker interface for lower glare.",
-    icon: <Moon className="size-5" />,
+    description: "Low glare ideal for dark environments.",
+    icon: Moon,
   },
   {
     value: "system",
     label: "System",
-    description: "Follow your device appearance automatically.",
-    icon: <Laptop className="size-5" />,
+    description: "Synchronize display with device state.",
+    icon: Laptop,
   },
 ];
 
@@ -53,55 +53,34 @@ const ThemeSettingsPage = ({
 
   return (
     <div className={cn("min-h-screen p-4 sm:p-6 lg:p-8", scope === "admin" ? "admin-shell" : "bg-background")}>
-      <div className="mx-auto max-w-5xl space-y-6">
-        <section className={cn(
-          "rounded-[2rem] border border-border bg-card px-5 py-6 shadow-sm sm:px-6 sm:py-8",
-          scope === "admin" && "admin-panel",
-        )}>
-          <div className="space-y-3">
-            <Badge
-              className="px-3 py-1 text-white"
-              style={scope === "admin" ? { backgroundColor: "var(--admin-accent-strong)" } : undefined}
-            >
-              Settings
-            </Badge>
-            <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
-              Appearance
-            </h1>
-            <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-              Choose how Acadex looks across your dashboard. For now this page only
-              controls theme mode.
-            </p>
-          </div>
+      <div className="mx-auto space-y-6">
+        {/* Header Metadata Section */}
+        <section className={cn("space-y-1.5", scope === "admin" && "admin-panel")}>
+          <h1 className="text-2xl font-semibold tracking-tight">Appearance</h1>
+          <p className="text-sm text-muted-foreground">
+            Manage your dashboard visual preferences and custom interfaces.
+          </p>
         </section>
 
-        <section className={cn(
-          "rounded-[2rem] border border-border bg-card p-5 shadow-sm sm:p-6",
-          scope === "admin" && "admin-panel",
-        )}>
-          <div className="flex flex-col gap-4 border-b border-border/70 pb-5 sm:flex-row sm:items-start sm:justify-between">
+        {/* Interactive Mode Grid */}
+        <section className={cn("space-y-4", scope === "admin" && "admin-panel")}>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-border pb-4">
             <div>
-              <p className={cn(
-                "text-xs font-black uppercase tracking-[0.25em] text-primary",
-                scope === "admin" && "admin-section-label",
-              )}>
-                Theme Mode
-              </p>
-              <h2 className="mt-2 text-2xl font-black tracking-tight">
-                Light, dark, or system
-              </h2>
+              <h2 className="text-sm font-medium text-foreground">Theme Mode</h2>
+              <p className="text-xs text-muted-foreground">Select your interface preference</p>
             </div>
-            <div className="rounded-2xl bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
-              Active theme:{" "}
-              <span className="font-bold text-foreground">
+            <div className="text-xs text-muted-foreground self-start sm:self-center">
+              Active configuration:{" "}
+              <span className="font-medium text-foreground">
                 {mounted ? `${activeTheme} (${resolvedTheme ?? "loading"})` : "loading"}
               </span>
             </div>
           </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-3">
             {THEME_OPTIONS.map((option) => {
               const isActive = mounted && activeTheme === option.value;
+              const Icon = option.icon;
 
               return (
                 <button
@@ -109,24 +88,27 @@ const ThemeSettingsPage = ({
                   type="button"
                   onClick={() => setTheme(option.value)}
                   className={cn(
-                    "rounded-[1.75rem] border p-5 text-left transition-all duration-200",
-                    "hover:-translate-y-1 hover:border-primary/40 hover:bg-muted/40",
+                    "flex flex-col text-left p-4 rounded-lg border bg-card transition-colors text-card-foreground",
                     isActive
-                      ? "border-primary bg-primary/10 shadow-sm"
-                      : "border-border bg-background/80",
+                      ? "border-primary ring-1 ring-primary/20 bg-accent/30"
+                      : "border-border hover:bg-muted/50",
                   )}
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex size-12 items-center justify-center rounded-2xl bg-muted text-foreground">
-                      {option.icon}
+                  <div className="flex items-center justify-between w-full mb-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                      <Icon className="h-4 w-4" />
                     </div>
-                    {isActive && <Badge>Selected</Badge>}
+                    {isActive && (
+                      <Badge variant="secondary" className="text-[10px] px-1.5 py-0 rounded">
+                        Active
+                      </Badge>
+                    )}
                   </div>
 
-                  <h3 className="mt-5 text-xl font-black tracking-tight">
+                  <h3 className="text-sm font-medium tracking-tight">
                     {option.label}
                   </h3>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  <p className="text-xs text-muted-foreground mt-1 leading-normal">
                     {option.description}
                   </p>
                 </button>
