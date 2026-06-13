@@ -4,4 +4,4 @@ const AdminSettingsRedirectPage = () => {
   redirect("/admin/dashboard/settings");
 };
 
-export default AdminSettingsRedirectPage;
+export default AdminSettingsRedirectPage; 
