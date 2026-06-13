@@ -1,7 +1,9 @@
-import { redirect } from "next/navigation";
+const clinetDashboard = () => {
+    return (
+        <div>
+            Client Dashboard
+        </div>
+    )
+}
 
-const DashboardPage = () => {
-    redirect("/dashboard/classroom");
-};
-
-export default DashboardPage;
+export default clinetDashboard;

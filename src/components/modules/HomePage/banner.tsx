@@ -66,7 +66,7 @@ const Banner = () => {
 
           {/* Action Buttons */}
           <div className="mt-12 flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500 sm:flex-row">
-            <Link href="/login">
+            <Link href="/login" passHref>
               <Button size="lg" className="h-16 rounded-2xl bg-orange-500 px-10 text-lg font-black shadow-xl shadow-orange-500/20 transition-all hover:scale-105 hover:bg-orange-600 active:scale-95 cursor-pointer">
                 Open Acadex
                 <ArrowRight className="ml-2 size-5" />
