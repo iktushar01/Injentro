@@ -42,10 +42,6 @@ export const getRouteOwner = (pathname : string) : "SUPER_ADMIN" | "ADMIN" | "CL
     if(isRouteMatches(pathname, adminProtectedRoutes)) {
         return "ADMIN";
     }
-    
-    if(isRouteMatches(pathname, clientProtectedRoutes)) {
-        return "CLIENT";
-    }
 
     if(isRouteMatches(pathname, commonProtectedRoutes)) {
         return "COMMON";
