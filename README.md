@@ -1,5 +1,5 @@
-<<<<<<< HEAD
-=======
-Injentro Coming Soon
+# Starter Client
 
->>>>>>> d5637edca5321b380947b2779d9f0789c890258e
+Next.js frontend for the full-stack project starter.
+
+See the [root README](../README.md) for setup, environment variables, and customization steps.

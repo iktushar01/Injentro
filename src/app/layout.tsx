@@ -1,3 +1,4 @@
+import { APP_NAME } from "@/lib/app-config";
 import { Toaster } from "@/components/ui/sonner";
 import QueryProviders from "@/providers/QueryProvider";
 import type { Metadata } from "next";
@@ -18,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Injentro",
-  description: "project starter for hackathons",
+  title: APP_NAME,
+  description: "Full-stack project starter with role-based auth",
 };
 
 export default function RootLayout({

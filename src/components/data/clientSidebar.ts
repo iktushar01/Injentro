@@ -1,11 +1,12 @@
 import { SidebarData } from "@/types/sidebar";
+import { APP_NAME } from "@/lib/app-config";
 
 export const getClientSidebarData = async (): Promise<SidebarData> => {
   return {
     logo: {
       src: "/logo.png",
-      alt: "Injentro logo",
-      title: "Injentro",
+      alt: `${APP_NAME} logo`,
+      title: APP_NAME,
       description: "Student Panel",
     },
     navGroups: [
